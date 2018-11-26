@@ -820,14 +820,15 @@ def nearest_neighbour(particles, neighbours=None, max_array_length=10000000):
         for indices in indices_in_each_batch:
             distances_squared = particles[indices].distances_squared(other_particles)
             if neighbours is None:
-                diagonal_indices = [numpy.arange(len(indices)), indices]
+                diagonal_indices = (numpy.arange(len(indices)), indices)
                 distances_squared.number[diagonal_indices] = numpy.inf # can't be your own neighbour
             neighbour_indices.append(distances_squared.argmin(axis=1))
         return other_particles[numpy.concatenate(neighbour_indices)]
     
     distances_squared = particles.distances_squared(other_particles)
     if neighbours is None:
-        diagonal_indices = [numpy.arange(len(particles))]*2
+        diagonal_indices = (numpy.arange(len(particles)), ) * 2
+        #diagonal_indices = numpy.tile(numpy.arange(len(particles)), (2, 1))
         distances_squared.number[diagonal_indices] = numpy.inf # can't be your own neighbour
     return other_particles[distances_squared.argmin(axis=1)]
     
@@ -1030,14 +1031,14 @@ def correlation_dimension(particles, max_array_length=10000000):
         indices_in_each_batch.append(numpy.arange(indices_in_each_batch[-1][-1]+1, len(particles)))
         for indices in indices_in_each_batch:
             distances_squared = particles[indices].distances_squared(particles)
-            diagonal_indices = [numpy.arange(len(indices)), indices]
+            diagonal_indices = (numpy.arange(len(indices)), indices)
             distances_squared.number[diagonal_indices] = numpy.inf # can't be your own neighbour
             
             counts_per_batch.append([(distances_squared < eps2).sum() for eps2 in eps2_range])
         number_of_close_pairs = numpy.array(counts_per_batch).sum(axis=0)
     else:
         distances_squared = particles.distances_squared(particles)
-        diagonal_indices = [numpy.arange(len(particles))]*2
+        diagonal_indices = (numpy.arange(len(particles)), ) * 2
         distances_squared.number[diagonal_indices] = numpy.inf # can't be your own neighbour
         number_of_close_pairs = numpy.array([(distances_squared < eps2).sum() for eps2 in eps2_range])
     

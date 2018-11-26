@@ -104,7 +104,7 @@ def points(grid):
             else:
                 slicing.append(slice(None,-1))
                 offset.append(-1)
-        result[slicing]=cell_centers+dx*numpy.asarray(offset)    
+        result[tuple(slicing)] = cell_centers + dx * numpy.asarray(offset)
 
     return result
     
@@ -138,7 +138,7 @@ def connectivity(grid):
 
         slicing1.append(i)
 
-        result[slicing1]=indices[slicing2]    
+        result[tuple(slicing1)] = indices[tuple(slicing2)]
 
     return result
 

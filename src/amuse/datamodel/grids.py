@@ -353,7 +353,7 @@ def new_structured_grid(shape, cell_corners, cell_positions=None, axes_names = "
                               slicing.append(slice(1,None)) 
                           else:
                               slicing.append(slice(None,-1))
-                      cp=cp+cc[slicing]              
+                      cp = cp + cc[tuple(slicing)]
                   cell_positions.append(cp/2**len(shape))          
 
         if len(cell_positions)!=len(shape):
